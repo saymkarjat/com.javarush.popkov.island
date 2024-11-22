@@ -1,0 +1,5 @@
+name: Wolf
+weight: 50
+maxAmount: 30
+maxSpeed: 3
+maxFood: 8

@@ -1,0 +1,5 @@
+name: Boar
+weight: 400
+maxAmount: 50
+maxSpeed: 2
+maxFood: 50

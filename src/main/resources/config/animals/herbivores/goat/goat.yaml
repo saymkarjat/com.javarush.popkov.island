@@ -1,0 +1,5 @@
+name: Goat
+weight: 60
+maxAmount: 140
+maxSpeed: 3
+maxFood: 10

@@ -1,0 +1,5 @@
+name: Buffalo
+weight: 700
+maxAmount: 10
+maxSpeed: 3
+maxFood: 100

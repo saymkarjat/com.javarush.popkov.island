@@ -1,0 +1,5 @@
+name: Duck
+weight: 1
+maxAmount: 200
+maxSpeed: 4
+maxFood: 0.15

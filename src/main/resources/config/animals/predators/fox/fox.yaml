@@ -1,0 +1,5 @@
+name: Fox
+weight: 8
+maxAmount: 30
+maxSpeed: 2
+maxFood: 2

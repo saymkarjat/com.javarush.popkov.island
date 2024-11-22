@@ -1,0 +1,5 @@
+name: Eagle
+weight: 6
+maxAmount: 20
+maxSpeed: 3
+maxFood: 1

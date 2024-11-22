@@ -1,0 +1,5 @@
+name: Sheep
+weight: 70
+maxAmount: 140
+maxSpeed: 3
+maxFood: 15

@@ -1,0 +1,5 @@
+name: Boa
+weight: 15
+maxAmount: 30
+maxSpeed: 1
+maxFood: 3
