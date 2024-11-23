@@ -104,6 +104,10 @@ public abstract class Animal extends Entity implements Cloneable {
         Cell cell = map.getCell(this.getCoordinate());
         cell.removeEntity(this);
     }
+//worker
+    public void reduceStarvation(){
+        setStarvation(starvation - maxFood/10);
+    }
 
     public boolean isDead(){
         if (starvation == 0){
