@@ -3,6 +3,8 @@ package org.island;
 
 import org.entities.Entity;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 
@@ -33,5 +35,10 @@ public class IslandMap {
         cell.removeEntity(entity);
         placeEntity(entity, target);
     }
+
+    public Set<Cell> getAllCells() {
+        return new HashSet<>(worldMap.values());
+    }
+
 
 }
