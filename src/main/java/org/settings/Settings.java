@@ -12,7 +12,7 @@ public class Settings {
     public static int islandHeight = 5;
     static String probabilitiesConfigPath = "config/eat_probabilities/probabilities.yaml";
     //вероятности съедения
-    public final static Map<?, ?> probabilities = YamlConfigLoader.loadEatProbabilities(probabilitiesConfigPath);
+    public final static Map<String, Map<String, Integer>> probabilities = YamlConfigLoader.loadEatProbabilities(probabilitiesConfigPath);
 
 
 

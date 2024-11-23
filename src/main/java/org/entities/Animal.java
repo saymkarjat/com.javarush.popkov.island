@@ -3,6 +3,7 @@ package org.entities;
 
 import lombok.Getter;
 import org.entities.enumerations.Direction;
+import org.entities.plants.Grass;
 import org.island.Cell;
 import org.island.Coordinate;
 import org.island.IslandMap;
@@ -18,6 +19,38 @@ public abstract class Animal extends Entity implements Cloneable {
     private int maxAmount;
     private double maxFood;
     private double starvation;
+
+    public void eat(IslandMap map){
+        Cell cell = map.getCell(this.getCoordinate());
+        Entity victim = cell.getAllEntitiesInCell().stream()
+                .filter(e -> Settings.probabilities.get(e.getClass().getSimpleName()).containsKey(e.getClass().getSimpleName()))
+                .findFirst().orElse(null);
+        if (victim == null){
+            return;
+        }
+        if (isEatingSuccessful(getProbability(victim))){
+            if (victim instanceof Grass){
+                double grassAmount = ((Grass) victim).getMaxAmount()/4;
+                setStarvation(starvation + grassAmount);
+                ((Grass) victim).setAmount(((Grass) victim).getAmount() - grassAmount);
+            }
+            if (victim instanceof Animal){
+                setStarvation(starvation + ((Animal) victim).getWeight());
+                ((Animal) victim).die(map);
+            }
+        }
+
+    }
+
+    private int getProbability(Entity victim){
+         return Settings.probabilities.get(this.getName()).get(victim.getClass().getSimpleName());
+    }
+    private boolean isEatingSuccessful(int probability){
+        if (ThreadLocalRandom.current().nextInt(0, 101) <= probability){
+            return true;
+        }
+        return false;
+    }
 
     public void move(IslandMap islandMap) {
         Coordinate start = this.coordinate;
@@ -50,7 +83,6 @@ public abstract class Animal extends Entity implements Cloneable {
         }
         return new Coordinate(x, y);
     }
-
     private boolean isMovementCorrect(Direction direction, int shift) {
         int o = switch (direction) {
             case LEFT, RIGHT -> this.coordinate.getX();
@@ -61,15 +93,24 @@ public abstract class Animal extends Entity implements Cloneable {
         }
         return false;
     }
-
     private Direction chooseDirection() {
         return Direction.values()[ThreadLocalRandom.current().nextInt(Direction.values().length)];
     }
-
     private int chooseCoordinateShiftForMove() {
         return ThreadLocalRandom.current().nextInt(maxSpeed);
     }
 
+    public void die(IslandMap map){
+        Cell cell = map.getCell(this.getCoordinate());
+        cell.removeEntity(this);
+    }
+
+    public boolean isDead(){
+        if (starvation == 0){
+            return true;
+        }
+        return false;
+    }
     public void setStarvation(double starvation) {
         if (starvation >= this.maxFood) {
             this.starvation = this.maxFood;
