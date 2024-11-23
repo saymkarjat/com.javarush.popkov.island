@@ -8,13 +8,11 @@ import java.util.stream.Collectors;
 
 public class Settings {
     //размер острова
-    public static int islandWidth = 2;
-    public static int islandHeight = 3;
+    public static int islandWidth = 5;
+    public static int islandHeight = 5;
     static String probabilitiesConfigPath = "config/eat_probabilities/probabilities.yaml";
     //вероятности съедения
-    public static Map<?, ?> probabilities = YamlConfigLoader.loadEatProbabilities(probabilitiesConfigPath).entrySet()
-            .stream()
-            .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, v->Collections.unmodifiableMap(v.getValue())));
+    public final static Map<?, ?> probabilities = YamlConfigLoader.loadEatProbabilities(probabilitiesConfigPath);
 
 
 

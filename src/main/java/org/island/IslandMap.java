@@ -20,6 +20,7 @@ public class IslandMap {
     public void placeEntity(Entity entity, Coordinate coordinate) {
         Cell cell = worldMap.getOrDefault(coordinate, new Cell());
         cell.placeEntityInCell(entity);
+        worldMap.put(coordinate, cell);
         entity.setCoordinate(coordinate);
     }
 
