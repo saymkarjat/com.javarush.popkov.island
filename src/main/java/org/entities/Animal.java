@@ -3,7 +3,9 @@ package org.entities;
 
 import lombok.Getter;
 import org.entities.enumerations.Direction;
+import org.entities.enumerations.EntityType;
 import org.entities.plants.Grass;
+import org.fabric.CloneEntityFactory;
 import org.island.Cell;
 import org.island.Coordinate;
 import org.island.IslandMap;
@@ -12,13 +14,23 @@ import org.settings.Settings;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Getter
-public abstract class Animal extends Entity implements Cloneable {
+public abstract class Animal extends Entity implements Cloneable, Reproducible {
     private int maxSpeed;
     private String name;
     private double weight;
     private int maxAmount;
     private double maxFood;
     private double starvation;
+
+    @Override
+    public void reproduce(IslandMap map) {
+        Cell cell = map.getCell(this.getCoordinate());
+        long countOfAnimals = cell.getEntityCountInCurrentCell(this);
+        if (countOfAnimals >= 2 && cell.isCapacityAvailable(this)){
+            Animal child = CloneEntityFactory.createAnimalWithClone(EntityType.valueOf(this.getClass().getSimpleName().toUpperCase()));
+            cell.placeEntityInCell(child);
+        }
+    }
 
     public void eat(IslandMap map){
         Cell cell = map.getCell(this.getCoordinate());
