@@ -8,7 +8,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class Cell {
+public class Cell implements Runnable {
     private CopyOnWriteArrayList<Entity> cell = new CopyOnWriteArrayList<>();
 
     public long getEntityCountInCurrentCell(Entity entity) {
@@ -36,5 +36,14 @@ public class Cell {
 
     public void placeEntityInCell(Entity entity) {
         cell.add(entity);
+    }
+    /*
+        - Задания роста растений (вырасти на кол-во)
+        - Задания жизненного цикла животных (worker, eat, reproduce, move)
+        - Задания вывода статистики по системе (sout) - текущее кол-во животных по видам в целом на острове + вес травы
+    */
+    @Override
+    public void run() {
+
     }
 }

@@ -29,9 +29,11 @@ public class EntityFactory {
             case CATERPILLAR -> new Caterpillar();
             case GRASS -> new Grass();
         };
-        if (entity instanceof Animal){
+        if (entity instanceof Animal) {
             YamlConfigLoader.loadAnimalFieldsConfig((Animal) entity);
         }
         return entity;
     }
-    }
+
+
+}

@@ -7,6 +7,10 @@ public class Grass extends Plant {
         setAmount(getMaxAmount());
     }
 
+    public void grow(){
+        setAmount(getAmount()+20);
+    }
+
     @Override
     public String toString() {
         return "\uD83C\uDF40";
