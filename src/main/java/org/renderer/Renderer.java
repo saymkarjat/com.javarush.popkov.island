@@ -1,5 +1,6 @@
 package org.renderer;
 
+import org.entities.Animal;
 import org.entities.enumerations.EntityType;
 import org.entities.herbivores.Herbivore;
 import org.entities.predators.Predator;
@@ -17,11 +18,13 @@ public class Renderer {
     }
     public void printStats(){
         long count = map.getAllCells().stream()
-                .mapToLong(e -> e.getAllEntitiesInCell().size())
-                .sum();
+                .flatMap(e->e.getAllEntitiesInCell().stream())
+                .filter(e->e instanceof Animal)
+                .count();
         System.out.println("Всего на острове - " + count);
         printCountOfHerbivoresAndPredators();
         printCountOfEachAnimal();
+        System.out.println();
     }
     public void printCountOfHerbivoresAndPredators(){
         long countHerbivore = map.getAllCells().stream()
@@ -44,8 +47,9 @@ public class Renderer {
                     .filter(e->e.getClass().getSimpleName().toUpperCase().equals(type.name()))
                     .count();
 
-            System.out.print(EntityFactory.createEntity(type)+"" + count + " ,");
+            System.out.print(EntityFactory.createEntity(type)+"" + count + "  ");
         }
+        System.out.println();
     }
 
 

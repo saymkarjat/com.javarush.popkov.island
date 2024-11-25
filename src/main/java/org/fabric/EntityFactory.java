@@ -31,6 +31,7 @@ public class EntityFactory {
         };
         if (entity instanceof Animal) {
             YamlConfigLoader.loadAnimalFieldsConfig((Animal) entity);
+            ((Animal) entity).setStarvation(((Animal) entity).getMaxFood()/2);
         }
         return entity;
     }

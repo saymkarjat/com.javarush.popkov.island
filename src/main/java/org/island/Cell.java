@@ -1,29 +1,32 @@
 package org.island;
 
+import lombok.Setter;
 import org.entities.Animal;
 import org.entities.Entity;
+import org.entities.plants.Grass;
+import org.renderer.Renderer;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.Collectors;
 
 public class Cell implements Runnable {
     private CopyOnWriteArrayList<Entity> cell = new CopyOnWriteArrayList<>();
+    @Setter
+    private IslandMap map;
 
     public long getEntityCountInCurrentCell(Entity entity) {
         return cell.stream()
-                .filter(e -> e.getClass() == entity.getClass())
+                .filter(e -> entity.getClass().isInstance(e))
                 .count();
-
     }
 
     public boolean isCapacityAvailable(Animal animal) {
         long limit = getEntityCountInCurrentCell(animal) + 1;
-        if (limit > animal.getMaxAmount()) {
-            return false;
-        }
-        return true;
+        return limit <= animal.getMaxAmount();
     }
 
     public List<Entity> getAllEntitiesInCell() {
@@ -35,15 +38,39 @@ public class Cell implements Runnable {
     }
 
     public void placeEntityInCell(Entity entity) {
-        cell.add(entity);
+        cell.add(entity); // Добавляет элемент в конец очереди
     }
+
+    private List<Grass> getAllGrass(){
+        return cell.stream()
+                .filter(e -> e instanceof Grass)
+                .map(e -> (Grass)e)
+                .collect(Collectors.toList());
+    }
+
+    private List<Animal> getAllAnimals(){
+        return cell.stream()
+                .filter(e -> e instanceof Animal)
+                .map(e -> (Animal)e)
+                .collect(Collectors.toList());
+    }
+
     /*
         - Задания роста растений (вырасти на кол-во)
         - Задания жизненного цикла животных (worker, eat, reproduce, move)
-        - Задания вывода статистики по системе (sout) - текущее кол-во животных по видам в целом на острове + вес травы
+
     */
     @Override
     public void run() {
+        List<Grass> grass = getAllGrass();
+        List<Animal> animals = getAllAnimals();
+        //grass grow()
+        grass.forEach(Grass::grow);
+//        worker, eat, reproduce, move
+        animals.forEach(Animal::reduceStarvation);
+        animals.forEach(e->e.eat(map));
+        //animals.forEach(e->e.reproduce(map));
+        animals.forEach(e->e.move(map));
 
     }
 }

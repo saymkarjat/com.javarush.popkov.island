@@ -10,7 +10,7 @@ import org.spawn.EntitySpawner;
 public class CaterpillarSpawner extends EntitySpawner<Caterpillar> {
     public CaterpillarSpawner(IslandMap map) {
         super(map);
-        super.count = 20;
+        super.count = 100;
     }
 
     @Override

@@ -28,14 +28,19 @@ public abstract class Animal extends Entity implements Cloneable, Reproducible {
         long countOfAnimals = cell.getEntityCountInCurrentCell(this);
         if (countOfAnimals >= 2 && cell.isCapacityAvailable(this)){
             Animal child = CloneEntityFactory.createAnimalWithClone(EntityType.valueOf(this.getClass().getSimpleName().toUpperCase()));
+            child.setCoordinate(this.getCoordinate());
             cell.placeEntityInCell(child);
         }
     }
 
     public void eat(IslandMap map){
+        if (this.isDead()){
+            this.die(map);
+            return;
+        }
         Cell cell = map.getCell(this.getCoordinate());
         Entity victim = cell.getAllEntitiesInCell().stream()
-                .filter(e -> Settings.probabilities.get(e.getClass().getSimpleName()).containsKey(e.getClass().getSimpleName()))
+                .filter(e -> Settings.probabilities.get(this.getClass()).containsKey(e.getClass()))
                 .findFirst().orElse(null);
         if (victim == null){
             return;
@@ -45,33 +50,42 @@ public abstract class Animal extends Entity implements Cloneable, Reproducible {
                 double grassAmount = ((Grass) victim).getMaxAmount()/4;
                 setStarvation(starvation + grassAmount);
                 ((Grass) victim).setAmount(((Grass) victim).getAmount() - grassAmount);
+                //System.out.println(this+"eat"+victim);
             }
             if (victim instanceof Animal){
                 setStarvation(starvation + ((Animal) victim).getWeight());
+                //System.out.println(this+"eat"+victim);
                 ((Animal) victim).die(map);
+
             }
         }
-
     }
 
     private int getProbability(Entity victim){
-         return Settings.probabilities.get(this.getName()).get(victim.getClass().getSimpleName());
+         return Settings.probabilities.get(this.getClass()).get(victim.getClass());
     }
     private boolean isEatingSuccessful(int probability){
         if (ThreadLocalRandom.current().nextInt(0, 101) <= probability){
             return true;
         }
         return false;
+
     }
 
     public void move(IslandMap islandMap) {
         Coordinate start = this.coordinate;
         Coordinate target = generateCorrectCoordinate(start);
+        if (start == target){
+            return;
+        }
         Cell targetCell = islandMap.getCell(target);
         if (targetCell == null || targetCell.isCapacityAvailable(this)) {
             islandMap.replaceEntity(start, target, this);
+            //System.out.println(this +"moved");
         }
     }
+
+
 
     private Coordinate generateCorrectCoordinate(Coordinate start) {
         int x = start.getX();
@@ -83,6 +97,9 @@ public abstract class Animal extends Entity implements Cloneable, Reproducible {
             shift = chooseCoordinateShiftForMove();
         }
         while (!isMovementCorrect(direction, shift));
+        if (shift == 0){
+            return start;
+        }
 
         if (direction == Direction.RIGHT) {
             x += shift;
@@ -96,20 +113,37 @@ public abstract class Animal extends Entity implements Cloneable, Reproducible {
         return new Coordinate(x, y);
     }
     private boolean isMovementCorrect(Direction direction, int shift) {
-        int o = switch (direction) {
-            case LEFT, RIGHT -> this.coordinate.getX();
-            case UP, DOWN -> this.coordinate.getY();
-        };
-        if (o + shift <= Settings.islandWidth && o + shift <= Settings.islandHeight && o - shift >= 0) {
-            return true;
+        int currentPosition;
+        int limit;
+
+        switch (direction) {
+            case RIGHT:
+                currentPosition = this.getCoordinate().getX();
+                limit = Settings.islandWidth;
+                return currentPosition + shift <= limit;
+
+            case LEFT:
+                currentPosition = this.getCoordinate().getX();
+                return currentPosition - shift >= 0;
+
+            case UP:
+                currentPosition = this.getCoordinate().getY();
+                return currentPosition - shift >= 0;
+
+            case DOWN:
+                currentPosition = this.getCoordinate().getY();
+                limit = Settings.islandHeight;
+                return currentPosition + shift <= limit;
+
+            default:
+                return false;
         }
-        return false;
     }
     private Direction chooseDirection() {
-        return Direction.values()[ThreadLocalRandom.current().nextInt(Direction.values().length)];
+        return Direction.values()[ThreadLocalRandom.current().nextInt(0, Direction.values().length)];
     }
     private int chooseCoordinateShiftForMove() {
-        return ThreadLocalRandom.current().nextInt(maxSpeed);
+        return ThreadLocalRandom.current().nextInt(0, maxSpeed+1);
     }
 
     public void die(IslandMap map){
@@ -118,7 +152,7 @@ public abstract class Animal extends Entity implements Cloneable, Reproducible {
     }
 //worker
     public void reduceStarvation(){
-        setStarvation(starvation - maxFood/10);
+        setStarvation(this.starvation - maxFood/6);
     }
 
     public boolean isDead(){

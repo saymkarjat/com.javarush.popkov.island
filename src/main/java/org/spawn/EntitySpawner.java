@@ -29,8 +29,8 @@ public class EntitySpawner<T extends Entity> extends Spawner implements Runnable
     }
 
     public Coordinate generateCoordinates() {
-        int x = ThreadLocalRandom.current().nextInt(0, Settings.islandWidth + 1);
-        int y = ThreadLocalRandom.current().nextInt(0, Settings.islandHeight + 1);
+        int x = ThreadLocalRandom.current().nextInt(Settings.islandWidth+1 );
+        int y = ThreadLocalRandom.current().nextInt(Settings.islandHeight +1);
         return new Coordinate(x, y);
     }
 

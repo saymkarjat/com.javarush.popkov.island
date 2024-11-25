@@ -20,10 +20,11 @@ public class IslandMap {
     private ConcurrentHashMap<Coordinate, Cell> worldMap = new ConcurrentHashMap<>();
 
     public void placeEntity(Entity entity, Coordinate coordinate) {
+        entity.setCoordinate(coordinate);
         Cell cell = worldMap.getOrDefault(coordinate, new Cell());
         cell.placeEntityInCell(entity);
         worldMap.put(coordinate, cell);
-        entity.setCoordinate(coordinate);
+
     }
 
     public Cell getCell(Coordinate coordinate) {
@@ -32,8 +33,8 @@ public class IslandMap {
 
     public void replaceEntity(Coordinate current, Coordinate target, Entity entity) {
         Cell cell = getCell(current);
-        cell.removeEntity(entity);
         placeEntity(entity, target);
+        cell.removeEntity(entity);
     }
 
     public Set<Cell> getAllCells() {

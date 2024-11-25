@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CloneEntityFactory {
-    static Map<EntityType, Entity> typeEntityMap = new HashMap<>();
+    public static Map<EntityType, Entity> typeEntityMap = new HashMap<>();
 
     static {
         fillTheMap();
