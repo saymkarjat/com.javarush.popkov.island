@@ -53,7 +53,7 @@ public class Simulation {
         for (Cell cell : cells) {
             serviceForCells.submit(() -> {
                 try {
-                    cell.setMap(map);  // Если нужно каждый раз
+                    cell.setMap(map);
                     cell.run();
                 } finally {
                     latch.countDown();
