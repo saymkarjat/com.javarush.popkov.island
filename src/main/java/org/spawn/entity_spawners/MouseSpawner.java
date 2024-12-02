@@ -10,7 +10,7 @@ import org.spawn.EntitySpawner;
 public class MouseSpawner extends EntitySpawner<Mouse> {
     public MouseSpawner(IslandMap map) {
         super(map);
-        super.count = 30;
+        super.count = 70;
     }
 
     @Override

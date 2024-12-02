@@ -11,7 +11,7 @@ public class FoxSpawner extends EntitySpawner<Fox> {
 
     public FoxSpawner(IslandMap map) {
         super(map);
-        super.count = 20;
+        super.count = 30;
     }
 
     @Override

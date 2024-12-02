@@ -61,12 +61,11 @@ public class Cell implements Runnable {
     public void run() {
         List<Grass> grass = getAllGrass();
         List<Animal> animals = getAllAnimals();
-        //grass grow()
-        //grass.forEach(Grass::grow);
-//        worker, eat, reproduce, move
+        grass.forEach(Grass::grow);
+        /*worker, eat, reproduce, move*/
         animals.forEach(Animal::reduceStarvation);
         animals.forEach(e->e.eat(map));
-        //animals.forEach(e->e.reproduce(map));
+        animals.forEach(e->e.reproduce(map));
         animals.forEach(e->e.move(map));
 
     }

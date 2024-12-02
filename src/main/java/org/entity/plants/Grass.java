@@ -8,7 +8,7 @@ public class Grass extends Plant {
     }
 
     public void grow(){
-        setAmount(getAmount()+5);
+        setAmount(getAmount()+30);
     }
 
     @Override

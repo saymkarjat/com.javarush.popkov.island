@@ -11,7 +11,7 @@ public class BearSpawner extends EntitySpawner<Bear> {
 
     public BearSpawner(IslandMap map) {
         super(map);
-        super.count = 15;
+        super.count = 20;
     }
 
     @Override

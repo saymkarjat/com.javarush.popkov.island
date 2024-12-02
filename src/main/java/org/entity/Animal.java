@@ -55,10 +55,16 @@ public abstract class Animal extends Entity implements Cloneable, Reproducible {
                 if (((Grass) victim).getAmount() == 0){
                     return;
                 }
-                double grassAmount = ((Grass) victim).getAmount()/3;
-                setStarvation(starvation + grassAmount);
-                ((Grass) victim).setAmount(((Grass) victim).getAmount() - grassAmount);
-                //System.out.println(this+"eat"+victim);
+                double grassAmount = ((Grass) victim).getMaxAmount()/4;
+                double currentAmount = ((Grass) victim).getAmount();
+                if (currentAmount < grassAmount){
+                    setStarvation(starvation+currentAmount);
+                    ((Grass) victim).setAmount(0);
+                }
+                else {
+                    setStarvation(starvation + grassAmount);
+                    ((Grass) victim).setAmount(((Grass) victim).getAmount() - grassAmount);
+                }
             }
             if (victim instanceof Animal){
                 setStarvation(starvation + ((Animal) victim).getWeight());
