@@ -1,7 +1,7 @@
 package org.island;
 
 
-import org.entities.Entity;
+import org.entity.Entity;
 
 import java.util.HashSet;
 import java.util.Set;

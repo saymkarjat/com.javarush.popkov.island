@@ -1,7 +1,7 @@
 package org.spawn;
 
 
-import org.entities.Entity;
+import org.entity.Entity;
 import org.island.Coordinate;
 import org.island.IslandMap;
 import org.settings.Settings;

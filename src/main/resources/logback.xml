@@ -1,0 +1,15 @@
+<configuration>
+    <!-- Настройка вывода в файл -->
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+        <file>logs/app.log</file> <!-- Путь к файлу -->
+        <append>false</append> <!-- Отключение добавления в файл, файл будет очищаться при каждом запуске -->
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Уровень логирования и добавление аппендера -->
+    <root level="info">
+        <appender-ref ref="FILE" />
+    </root>
+</configuration>

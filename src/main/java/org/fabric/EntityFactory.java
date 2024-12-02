@@ -1,12 +1,12 @@
 package org.fabric;
 
 import org.configuration.YamlConfigLoader;
-import org.entities.Animal;
-import org.entities.Entity;
-import org.entities.enumerations.EntityType;
-import org.entities.herbivores.*;
-import org.entities.plants.Grass;
-import org.entities.predators.*;
+import org.entity.Animal;
+import org.entity.Entity;
+import org.entity.enumerations.EntityType;
+import org.entity.herbivores.*;
+import org.entity.plants.Grass;
+import org.entity.predators.*;
 
 public class EntityFactory {
 

@@ -1,14 +1,12 @@
 package org.renderer;
 
-import org.entities.Animal;
-import org.entities.enumerations.EntityType;
-import org.entities.herbivores.Herbivore;
-import org.entities.predators.Predator;
+import org.entity.Animal;
+import org.entity.enumerations.EntityType;
+import org.entity.herbivores.Herbivore;
+import org.entity.predators.Predator;
+import org.fabric.CloneEntityFactory;
 import org.fabric.EntityFactory;
 import org.island.IslandMap;
-import org.w3c.dom.ls.LSOutput;
-
-import java.util.Arrays;
 
 public class Renderer {
     private IslandMap map;
@@ -27,18 +25,23 @@ public class Renderer {
         System.out.println();
     }
     public void printCountOfHerbivoresAndPredators(){
-        long countHerbivore = map.getAllCells().stream()
+        System.out.println("Хищники: " + printCountOfPredators() +" Травоядные: " + printCountOfHerbivores());
+
+    }
+    public long printCountOfHerbivores(){
+        return map.getAllCells().stream()
                 .flatMap(e->e.getAllEntitiesInCell().stream())
                 .filter(e->e instanceof Herbivore)
                 .count();
+    }
 
-        long countPredator = map.getAllCells().stream()
+    public long printCountOfPredators(){
+        return map.getAllCells().stream()
                 .flatMap(e->e.getAllEntitiesInCell().stream())
                 .filter(e->e instanceof Predator)
                 .count();
-        System.out.println("Хищники: " + countPredator +" Травоядные: " + countHerbivore);
-
     }
+
 
     public void printCountOfEachAnimal() {
         for (EntityType type : EntityType.values()) {
@@ -47,7 +50,7 @@ public class Renderer {
                     .filter(e->e.getClass().getSimpleName().toUpperCase().equals(type.name()))
                     .count();
 
-            System.out.print(EntityFactory.createEntity(type)+"" + count + "  ");
+            System.out.print(CloneEntityFactory.typeEntityMap.get(type) +"" + count + "  ");
         }
         System.out.println();
     }

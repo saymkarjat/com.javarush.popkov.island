@@ -1,11 +1,10 @@
 package org.simulation;
 
-import org.entities.Animal;
-import org.entities.Entity;
+import lombok.extern.slf4j.Slf4j;
+import org.entity.Entity;
 import org.island.Cell;
 import org.island.IslandMap;
 import org.renderer.Renderer;
-import org.settings.Settings;
 import org.spawn.*;
 import org.spawn.entity_spawners.*;
 
@@ -14,8 +13,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.*;
-
+import java.util.concurrent.atomic.AtomicInteger;
+@Slf4j
 public class Simulation {
+    private AtomicInteger day = new AtomicInteger(0);
+    public final int CORE_SIZE_FOR_CELLS = 4;
+    public final int CORE_SIZE_FOR_SPAWN = 6;
+    public final int CORE_SIZE_FOR_SCHEDULE = 1;
     private List<EntitySpawner<?>> spawners;
     private ExecutorService executorSpawnService;
     private ScheduledExecutorService executorSimulationService;
@@ -26,12 +30,12 @@ public class Simulation {
 
     public Simulation(IslandMap map) {
         this.spawners = new ArrayList<>();
-        this.executorSpawnService = Executors.newFixedThreadPool(6);
+        this.executorSpawnService = Executors.newFixedThreadPool(CORE_SIZE_FOR_SPAWN);
         this.map = map;
         this.renderer = new Renderer(map);
         this.entitySpawner = new EntitySpawner<>(map);
-        this.executorSimulationService = Executors.newScheduledThreadPool(1);
-        this.serviceForCells = Executors.newFixedThreadPool(4);
+        this.executorSimulationService = Executors.newScheduledThreadPool(CORE_SIZE_FOR_SCHEDULE);
+        this.serviceForCells = Executors.newFixedThreadPool(CORE_SIZE_FOR_CELLS);
     }
 
     public void startSimulation(){
@@ -42,6 +46,9 @@ public class Simulation {
     public void startLifeCycle() {
         Set<Cell> cells = map.getAllCells();
         CountDownLatch latch = new CountDownLatch(cells.size());
+        int newDay = day.incrementAndGet();
+        log.info("ДЕНЬ №{}", newDay);
+        System.out.println("ДЕНЬ №"+newDay);
 
         for (Cell cell : cells) {
             serviceForCells.submit(() -> {
@@ -60,22 +67,36 @@ public class Simulation {
             Thread.currentThread().interrupt();
             System.err.println("Lifecycle interrupted!");
         }
+        if (renderer.printCountOfPredators() == 0 || renderer.printCountOfHerbivores() == 0){
+            stopSimulation();
+        }
 
         renderer.printStats();
     }
 
-    public void stopSimulation(){
+    public void stopSimulation() {
         executorSimulationService.shutdown();
         try {
-            // Ждём 10 секунд
             if (!executorSimulationService.awaitTermination(10, TimeUnit.SECONDS)) {
-                executorSimulationService.shutdownNow(); // Принудительно останавливаем
+                executorSimulationService.shutdownNow();
             }
         } catch (InterruptedException e) {
             executorSimulationService.shutdownNow();
-            throw new RuntimeException(e);
         }
+
+        serviceForCells.shutdown();
+        try {
+            if (!serviceForCells.awaitTermination(10, TimeUnit.SECONDS)) {
+                serviceForCells.shutdownNow();
+            }
+        } catch (InterruptedException e) {
+            serviceForCells.shutdownNow();
+        }
+
+        log.info("Симуляция завершена");
+        System.out.println("Симуляция завершена");
     }
+
     public void spawnSimulation(){
         addSpawners();
         for (EntitySpawner<?> spawner : spawners) {

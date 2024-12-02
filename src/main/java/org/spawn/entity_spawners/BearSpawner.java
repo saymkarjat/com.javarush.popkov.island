@@ -1,8 +1,8 @@
 package org.spawn.entity_spawners;
 
-import org.entities.Entity;
-import org.entities.enumerations.EntityType;
-import org.entities.predators.Bear;
+import org.entity.Entity;
+import org.entity.enumerations.EntityType;
+import org.entity.predators.Bear;
 import org.fabric.CloneEntityFactory;
 import org.island.IslandMap;
 import org.spawn.EntitySpawner;

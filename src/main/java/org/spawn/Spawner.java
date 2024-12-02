@@ -1,6 +1,6 @@
 package org.spawn;
 
-import org.entities.Entity;
+import org.entity.Entity;
 
 public abstract class Spawner {
 

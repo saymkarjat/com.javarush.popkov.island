@@ -1,16 +1,14 @@
 package org.configuration;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import org.entities.Animal;
-import org.entities.herbivores.*;
-import org.entities.plants.Grass;
-import org.entities.predators.*;
+import org.entity.Animal;
+import org.entity.herbivores.*;
+import org.entity.plants.Grass;
+import org.entity.predators.*;
 
 import java.io.InputStream;
 import java.lang.reflect.Field;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 

@@ -1,15 +1,12 @@
 package org.island;
 
 import lombok.Setter;
-import org.entities.Animal;
-import org.entities.Entity;
-import org.entities.plants.Grass;
-import org.renderer.Renderer;
+import org.entity.Animal;
+import org.entity.Entity;
+import org.entity.plants.Grass;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
@@ -65,7 +62,7 @@ public class Cell implements Runnable {
         List<Grass> grass = getAllGrass();
         List<Animal> animals = getAllAnimals();
         //grass grow()
-        grass.forEach(Grass::grow);
+        //grass.forEach(Grass::grow);
 //        worker, eat, reproduce, move
         animals.forEach(Animal::reduceStarvation);
         animals.forEach(e->e.eat(map));

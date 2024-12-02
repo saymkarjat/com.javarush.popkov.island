@@ -1,8 +1,8 @@
 package org.fabric;
 
-import org.entities.Animal;
-import org.entities.Entity;
-import org.entities.enumerations.EntityType;
+import org.entity.Animal;
+import org.entity.Entity;
+import org.entity.enumerations.EntityType;
 
 import java.util.HashMap;
 import java.util.Map;
